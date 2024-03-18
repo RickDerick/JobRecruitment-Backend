@@ -21,6 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'firstName',
+        'lastName',
+        'secondName',
+
     ];
 
     /**
@@ -31,8 +36,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'otp',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
     ];
 
+    protected $appends = ['profile','profile_photo_url'];
     /**
      * The attributes that should be cast.
      *
@@ -42,4 +51,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function routeNotificationForSms ($notifiable): string
+    {
+        return format_phone_no($this->phone);
+    }
+    
+    public function oneTimePasswords()
+    {
+        return $this->hasMany(UserOneTimePassword::class);
+    }
 }
