@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class job extends Model
 {
     use HasFactory;
-    private $primaryKey = 'code';
+    protected $primaryKey = 'code';
     public $incrementing = false;
 
 
