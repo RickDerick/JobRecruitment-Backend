@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('grade',20);
             $table->string('reportsTo',20);
             $table->string('payFrequency');
-            $table->string('code',20);
             $table->timestamps();
         });
     }
