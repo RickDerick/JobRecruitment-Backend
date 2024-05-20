@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+use App\Lib\Authenticator; 
 
 use Illuminate\Support\ServiceProvider;
 
@@ -11,7 +12,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind('authenticator',function(){
+            return new Authenticator();
+        });
     }
 
     /**
