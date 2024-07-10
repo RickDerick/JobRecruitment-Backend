@@ -3,23 +3,20 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use App\Models\UserOneTimePassword;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OneTimePasswordMailNotice extends Notification
+class userRegistrationNotice extends Notification
 {
     use Queueable;
-
-    private UserOneTimePassword $oneTimePassword;
 
     /**
      * Create a new notification instance.
      */
     public function __construct()
     {
-        //$this->oneTimePassword = $oneTimePassword;
+        //
     }
 
     /**
@@ -38,9 +35,12 @@ class OneTimePasswordMailNotice extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-        ->subject('One Time Password')
-        ->greeting("Hello " . $notifiable->name ?: 'there')
-        ->line('Your OTP code is ' . $this->oneTimePassword->otp);
+        ->subject("Welcome")
+        ->line('Welcome to '.env('APP_NAME').'. create your account now')
+        ->line('Your application otp code is '.$notifiable->otp_code)
+        ->line('Or click the button below to create your account')
+        //->action('Create Account', config('app.url') . 'otp/' . base64_encode($notifiable) .'/?verify=' . base64_encode($notifiable->otp_code))
+        ->line('Thank you for choosing to be part of us.');
     }
 
     /**

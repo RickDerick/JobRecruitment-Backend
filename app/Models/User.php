@@ -3,9 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Notifications\OneTimePasswordMailNotice;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
@@ -61,5 +64,16 @@ class User extends Authenticatable
     public function oneTimePasswords()
     {
         return $this->hasMany(UserOneTimePassword::class);
+    }
+
+    public function sendOtp($code = null)
+    {
+        $this->otp = $code ? : generate_user_otp();
+        $this->save();
+        try {
+            $this->notify(new OneTimePasswordMailNotice());
+        } catch (\Exception $exception) {
+            Log::error('Error sending OTP code mail notification', ['error' => $exception->getMessage()]);
+        }
     }
 }
