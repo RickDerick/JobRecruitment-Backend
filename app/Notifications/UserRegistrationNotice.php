@@ -37,9 +37,9 @@ class userRegistrationNotice extends Notification
         return (new MailMessage)
         ->subject("Welcome")
         ->line('Welcome to '.env('APP_NAME').'. create your account now')
-        ->line('Your application otp code is '.$notifiable->otp_code)
+        ->line('Your application otp code is '.$notifiable->otp)
         ->line('Or click the button below to create your account')
-        //->action('Create Account', config('app.url') . 'otp/' . base64_encode($notifiable) .'/?verify=' . base64_encode($notifiable->otp_code))
+        //->action('Create Account', config('app.url') . 'otp/' . base64_encode($notifiable) .'/?verify=' . base64_encode($notifiable->otp))
         ->line('Thank you for choosing to be part of us.');
     }
 

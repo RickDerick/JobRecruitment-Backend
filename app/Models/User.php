@@ -4,12 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Notifications\OneTimePasswordMailNotice;
+use App\Notifications\OtpCodeMailNotification;
+use App\Notifications\OtpCodeNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
-use Laravel\Passport\HasApiTokens;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -23,7 +24,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'phone',
+        'phone_no',
         'password',
         'avatar',
         'firstName',
@@ -45,7 +46,7 @@ class User extends Authenticatable
         'two_factor_secret',
     ];
 
-    protected $appends = ['profile','profile_photo_url'];
+   // protected $appends = ['profile','profile_photo_url'];
     /**
      * The attributes that should be cast.
      *
@@ -56,10 +57,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function routeNotificationForSms ($notifiable): string
-    {
-        return format_phone_no($this->phone);
-    }
+    // public function routeNotificationForSms ($notifiable): string
+    // {
+    //     return format_phone_no($this->phone);
+
     
     public function oneTimePasswords()
     {
@@ -70,8 +71,9 @@ class User extends Authenticatable
     {
         $this->otp = $code ? : generate_user_otp();
         $this->save();
+      //  $this->notify(new OtpCodeNotification());
         try {
-            $this->notify(new OneTimePasswordMailNotice());
+            $this->notify(new OtpCodeMailNotification());
         } catch (\Exception $exception) {
             Log::error('Error sending OTP code mail notification', ['error' => $exception->getMessage()]);
         }
